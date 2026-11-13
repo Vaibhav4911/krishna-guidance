@@ -1,0 +1,64 @@
+version: '3.9'
+
+services:
+  web:
+    build:
+      context: ../../apps/web
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: development
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: ../../apps/api
+    ports:
+      - '8000:8000'
+    environment:
+      APP_ENV: development
+      DATABASE_URL: postgresql+psycopg://appuser:changeme@postgres:5432/krishna_guidance
+      JWT_SECRET: change-me-in-production
+      JWT_ALGORITHM: HS256
+      JWT_TTL_MINUTES: 60
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      qdrant:
+        condition: service_started
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: krishna_guidance
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: changeme
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U appuser -d krishna_guidance']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - '6333:6333'
+      - '6334:6334'
+    volumes:
+      - qdrantdata:/qdrant/storage
+
+volumes:
+  pgdata:
+  qdrantdata:

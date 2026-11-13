@@ -1,0 +1,179 @@
+{
+  "source_id": "wikisource-sa-bhagavad-gita",
+  "title": "Bhagavad Gita (Sanskrit mūlapāṭha)",
+  "language": "sa",
+  "source_index_url": "https://sa.wikisource.org/wiki/भगवद्गीता",
+  "license": "CC BY-SA 4.0 for Wikimedia contributor content",
+  "license_url": "https://foundation.wikimedia.org/wiki/Policy:Terms_of_Use",
+  "attribution": "Sanskrit text transcribed from Sanskrit Wikisource. Attribute Wikisource contributors and link to each source page/revision. Share derivatives of the transcribed corpus under CC BY-SA 4.0.",
+  "citation_granularity": "chapter_and_verse",
+  "chapter_count": 18,
+  "verse_count": 700,
+  "chapter_verse_counts": [
+    47,
+    72,
+    43,
+    42,
+    29,
+    47,
+    30,
+    28,
+    34,
+    42,
+    55,
+    20,
+    34,
+    27,
+    20,
+    24,
+    28,
+    78
+  ],
+  "downloaded_at": "2026-11-13T11:29:23.183866+00:00",
+  "chapter_sources": {
+    "8": {
+      "title": "भगवद्गीता/अक्षरब्रह्मयोगः",
+      "revision_id": 417779,
+      "revision_timestamp": "2026-07-08T00:27:36Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%85%E0%A4%95%E0%A5%8D%E0%A4%B7%E0%A4%B0%E0%A4%AC%E0%A5%8D%E0%A4%B0%E0%A4%B9%E0%A5%8D%E0%A4%AE%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=417779",
+      "wikitext_sha256": "0094d22df14c783706febc5b605fbc43fbaf101e55b03f59edf7fd320ba6a563",
+      "verse_count": 28
+    },
+    "1": {
+      "title": "भगवद्गीता/अर्जुनविषादयोगः",
+      "revision_id": 343151,
+      "revision_timestamp": "2022-08-10T14:13:52Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%85%E0%A4%B0%E0%A5%8D%E0%A4%9C%E0%A5%81%E0%A4%A8%E0%A4%B5%E0%A4%BF%E0%A4%B7%E0%A4%BE%E0%A4%A6%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=343151",
+      "wikitext_sha256": "8101c174c0d07676c2eacc1e166298f4f6567961f8b75892412991811818bbde",
+      "verse_count": 47
+    },
+    "6": {
+      "title": "भगवद्गीता/आत्मसंयमयोगः",
+      "revision_id": 216842,
+      "revision_timestamp": "2019-11-18T03:20:58Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%86%E0%A4%A4%E0%A5%8D%E0%A4%AE%E0%A4%B8%E0%A4%82%E0%A4%AF%E0%A4%AE%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=216842",
+      "wikitext_sha256": "5b851da36db9d17cfc3f60ccf4ba155f6dab6fedf819247d7f58b94ad2204c5f",
+      "verse_count": 47
+    },
+    "3": {
+      "title": "भगवद्गीता/कर्मयोगः",
+      "revision_id": 216838,
+      "revision_timestamp": "2019-11-18T03:16:38Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%95%E0%A4%B0%E0%A5%8D%E0%A4%AE%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=216838",
+      "wikitext_sha256": "b11fad003e4b2bde357de95d8e3df43b554b78888340e06bd8bfebc4cd2802d9",
+      "verse_count": 43
+    },
+    "5": {
+      "title": "भगवद्गीता/कर्मसंन्यासयोगः",
+      "revision_id": 413698,
+      "revision_timestamp": "2026-01-08T00:48:54Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%95%E0%A4%B0%E0%A5%8D%E0%A4%AE%E0%A4%B8%E0%A4%82%E0%A4%A8%E0%A5%8D%E0%A4%AF%E0%A4%BE%E0%A4%B8%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=413698",
+      "wikitext_sha256": "467fe02d0c2557a39994cef0186eff620f6aed736f19368537c4ba228e31c7ac",
+      "verse_count": 29
+    },
+    "13": {
+      "title": "भगवद्गीता/क्षेत्रक्षेत्रज्ञविभागयोगः",
+      "revision_id": 216831,
+      "revision_timestamp": "2019-11-17T13:52:45Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%95%E0%A5%8D%E0%A4%B7%E0%A5%87%E0%A4%A4%E0%A5%8D%E0%A4%B0%E0%A4%95%E0%A5%8D%E0%A4%B7%E0%A5%87%E0%A4%A4%E0%A5%8D%E0%A4%B0%E0%A4%9C%E0%A5%8D%E0%A4%9E%E0%A4%B5%E0%A4%BF%E0%A4%AD%E0%A4%BE%E0%A4%97%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=216831",
+      "wikitext_sha256": "a5da291f00c33fb369e1a5c10a2423304f3a0dfdedd125085202c6fce5cff49e",
+      "verse_count": 34
+    },
+    "14": {
+      "title": "भगवद्गीता/गुणत्रयविभागयोगः",
+      "revision_id": 333879,
+      "revision_timestamp": "2022-03-18T22:26:47Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%97%E0%A5%81%E0%A4%A3%E0%A4%A4%E0%A5%8D%E0%A4%B0%E0%A4%AF%E0%A4%B5%E0%A4%BF%E0%A4%AD%E0%A4%BE%E0%A4%97%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=333879",
+      "wikitext_sha256": "2b4401565fc5147ee6099e16c47b346eaf029efbab9d0c1e244bd3f4ff9c721c",
+      "verse_count": 27
+    },
+    "4": {
+      "title": "भगवद्गीता/ज्ञानकर्मसंन्यासयोगः",
+      "revision_id": 335464,
+      "revision_timestamp": "2022-04-08T20:26:29Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%9C%E0%A5%8D%E0%A4%9E%E0%A4%BE%E0%A4%A8%E0%A4%95%E0%A4%B0%E0%A5%8D%E0%A4%AE%E0%A4%B8%E0%A4%82%E0%A4%A8%E0%A5%8D%E0%A4%AF%E0%A4%BE%E0%A4%B8%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=335464",
+      "wikitext_sha256": "bbfa4b1b448f9e55877042ac2cc810744d7f86e316808d460ee6e882705e5eba",
+      "verse_count": 42
+    },
+    "7": {
+      "title": "भगवद्गीता/ज्ञानविज्ञानयोगः",
+      "revision_id": 416795,
+      "revision_timestamp": "2026-06-15T23:04:55Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%9C%E0%A5%8D%E0%A4%9E%E0%A4%BE%E0%A4%A8%E0%A4%B5%E0%A4%BF%E0%A4%9C%E0%A5%8D%E0%A4%9E%E0%A4%BE%E0%A4%A8%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=416795",
+      "wikitext_sha256": "124e48ca662d26aff61844a52bc9adca40126c31320b1cb08b0ee655078db0e8",
+      "verse_count": 30
+    },
+    "16": {
+      "title": "भगवद्गीता/दैवासुरसम्पद्विभागयोगः",
+      "revision_id": 216848,
+      "revision_timestamp": "2019-11-18T03:24:56Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%A6%E0%A5%88%E0%A4%B5%E0%A4%BE%E0%A4%B8%E0%A5%81%E0%A4%B0%E0%A4%B8%E0%A4%AE%E0%A5%8D%E0%A4%AA%E0%A4%A6%E0%A5%8D%E0%A4%B5%E0%A4%BF%E0%A4%AD%E0%A4%BE%E0%A4%97%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=216848",
+      "wikitext_sha256": "ec4a5516d77eca75cc59ed9d94f841dbcc224d3da0c3768e3414289edd9de20a",
+      "verse_count": 24
+    },
+    "15": {
+      "title": "भगवद्गीता/पुरुषोत्तमयोगः",
+      "revision_id": 371660,
+      "revision_timestamp": "2023-05-09T07:49:35Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%AA%E0%A5%81%E0%A4%B0%E0%A5%81%E0%A4%B7%E0%A5%8B%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%AE%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=371660",
+      "wikitext_sha256": "16a8f90cecaa900100c2e2ac1f93bdf0db8550fc2305a926237c6acdd801f795",
+      "verse_count": 20
+    },
+    "12": {
+      "title": "भगवद्गीता/भक्तियोगः",
+      "revision_id": 333675,
+      "revision_timestamp": "2022-03-15T03:56:17Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%AD%E0%A4%95%E0%A5%8D%E0%A4%A4%E0%A4%BF%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=333675",
+      "wikitext_sha256": "d485e6d6a238ce59ae88d8b047486fdaf9d870f770ba58d761e80584db14e788",
+      "verse_count": 20
+    },
+    "18": {
+      "title": "भगवद्गीता/मोक्षसंन्यासयोगः",
+      "revision_id": 216850,
+      "revision_timestamp": "2019-11-18T03:25:59Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%AE%E0%A5%8B%E0%A4%95%E0%A5%8D%E0%A4%B7%E0%A4%B8%E0%A4%82%E0%A4%A8%E0%A5%8D%E0%A4%AF%E0%A4%BE%E0%A4%B8%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=216850",
+      "wikitext_sha256": "bafbad34f42dfef5d405bf421088e0a9d35a0ce0556f22f56a1512f02963067d",
+      "verse_count": 78
+    },
+    "9": {
+      "title": "भगवद्गीता/राजविद्याराजगुह्ययोगः",
+      "revision_id": 334069,
+      "revision_timestamp": "2022-03-23T08:46:40Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%B0%E0%A4%BE%E0%A4%9C%E0%A4%B5%E0%A4%BF%E0%A4%A6%E0%A5%8D%E0%A4%AF%E0%A4%BE%E0%A4%B0%E0%A4%BE%E0%A4%9C%E0%A4%97%E0%A5%81%E0%A4%B9%E0%A5%8D%E0%A4%AF%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=334069",
+      "wikitext_sha256": "da8416c1c9d6aad3e74d4cc3b2ff15792b1d82a2b33a93cc127e1f55b69f1b40",
+      "verse_count": 34
+    },
+    "10": {
+      "title": "भगवद्गीता/विभूतियोगः",
+      "revision_id": 333448,
+      "revision_timestamp": "2022-03-08T02:18:56Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%B5%E0%A4%BF%E0%A4%AD%E0%A5%82%E0%A4%A4%E0%A4%BF%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=333448",
+      "wikitext_sha256": "d1eab34172971dc6287f876b7c7db6eeb9c2a718fc13c1e3437f26dcbcfa7a3e",
+      "verse_count": 42
+    },
+    "11": {
+      "title": "भगवद्गीता/विश्वरूपदर्शनयोगः",
+      "revision_id": 333355,
+      "revision_timestamp": "2022-03-05T05:12:06Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%B5%E0%A4%BF%E0%A4%B6%E0%A5%8D%E0%A4%B5%E0%A4%B0%E0%A5%82%E0%A4%AA%E0%A4%A6%E0%A4%B0%E0%A5%8D%E0%A4%B6%E0%A4%A8%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=333355",
+      "wikitext_sha256": "2ad8ac994985a68f7c4a699eca8223cc20f1c874f1acefe4684514bd0965a5af",
+      "verse_count": 55
+    },
+    "17": {
+      "title": "भगवद्गीता/श्रद्धात्रयविभागयोगः",
+      "revision_id": 216849,
+      "revision_timestamp": "2019-11-18T03:25:25Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%B6%E0%A5%8D%E0%A4%B0%E0%A4%A6%E0%A5%8D%E0%A4%A7%E0%A4%BE%E0%A4%A4%E0%A5%8D%E0%A4%B0%E0%A4%AF%E0%A4%B5%E0%A4%BF%E0%A4%AD%E0%A4%BE%E0%A4%97%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=216849",
+      "wikitext_sha256": "2620ebc92809d6f0c6bf72b3c2a3679d7d91179b9c1b717a13a90f66b4e1cd00",
+      "verse_count": 28
+    },
+    "2": {
+      "title": "भगवद्गीता/साङ्ख्ययोगः",
+      "revision_id": 408369,
+      "revision_timestamp": "2025-04-24T23:57:44Z",
+      "source_url": "https://sa.wikisource.org/w/index.php?title=%E0%A4%AD%E0%A4%97%E0%A4%B5%E0%A4%A6%E0%A5%8D%E0%A4%97%E0%A5%80%E0%A4%A4%E0%A4%BE%2F%E0%A4%B8%E0%A4%BE%E0%A4%99%E0%A5%8D%E0%A4%96%E0%A5%8D%E0%A4%AF%E0%A4%AF%E0%A5%8B%E0%A4%97%E0%A4%83&oldid=408369",
+      "wikitext_sha256": "9d365c91e86947c2c0b5b55a852566a7ef029877e78dc5d10358f753111fc3d9",
+      "verse_count": 72
+    }
+  }
+}

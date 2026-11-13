@@ -1,0 +1,14 @@
+{
+  "name": "krishna-guidance",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @krishna-guidance/web",
+    "build": "npm run build --workspace @krishna-guidance/web",
+    "lint": "npm run lint --workspace @krishna-guidance/web",
+    "start": "npm run start --workspace @krishna-guidance/web"
+  },
+  "packageManager": "npm@10.8.2"
+}

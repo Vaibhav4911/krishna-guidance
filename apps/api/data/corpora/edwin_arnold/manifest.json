@@ -1,0 +1,19 @@
+{
+  "source_id": "gutenberg-2388-edwin-arnold",
+  "title": "The Song Celestial; Or, Bhagavad-Gita (from the Mahabharata)",
+  "translator": "Sir Edwin Arnold",
+  "translation_publication_year": 1885,
+  "source_printed_edition_year": 1900,
+  "language": "en",
+  "source_url": "https://www.gutenberg.org/ebooks/2388",
+  "download_url": "https://www.gutenberg.org/cache/epub/2388/pg2388.txt",
+  "license_url": "https://www.gutenberg.org/policy/license.html",
+  "rights_status": "public_domain_us_verified_other_jurisdictions_unverified",
+  "rights_note": "Project Gutenberg identifies this eBook as public domain in the United States. Verify rights in each deployment jurisdiction before redistribution or production use.",
+  "attribution": "The Song Celestial; Or, Bhagavad-Gita, translated by Sir Edwin Arnold; Project Gutenberg eBook #2388.",
+  "citation_granularity": "chapter_only",
+  "verse_alignment": "not_provided_by_source",
+  "source_sha256": "85b22401a9d256179f9a2e407215eb516da9b8213f23c32e03d66709d839a9e0",
+  "passage_count": 276,
+  "chapter_count": 18
+}

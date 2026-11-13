@@ -1,0 +1,15 @@
+node_modules/
+.next/
+out/
+.env
+.env.*
+!.env.example
+!.env.local.example
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+apps/api/data/qdrant/
+.DS_Store
+npm-debug.log*
