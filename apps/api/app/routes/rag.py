@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 
 from app.db.models import User
 from app.middleware.auth import get_current_user
-from app.services.openai_service import OpenAIConfigurationError, OpenAIProviderError
+from app.services.model_service import ModelConfigurationError, ModelProviderError
 from app.services.sanskrit_corpus import build_sanskrit_citation
 from app.services.sanskrit_rag_service import (
     SanskritIndexUnavailableError,
@@ -20,7 +20,7 @@ router = APIRouter(prefix="/api/v1")
 
 class RetrievalRequest(BaseModel):
     query: str = Field(..., min_length=1, max_length=3000)
-    language: Literal["en", "hi", "sa"] = "en"
+    language: Literal["en", "hi"] = "en"
 
 
 @router.post("/rag/search")
@@ -29,13 +29,17 @@ def search_corpus(
     _current_user: User = Depends(get_current_user),
 ):
     try:
-        verses = retrieve_sanskrit_verses(payload.query, limit=5)
-    except (OpenAIConfigurationError, SanskritIndexUnavailableError) as error:
+        verses = retrieve_sanskrit_verses(
+            payload.query,
+            limit=5,
+            language=payload.language,
+        )
+    except (ModelConfigurationError, SanskritIndexUnavailableError) as error:
         raise HTTPException(status_code=503, detail=str(error)) from error
-    except OpenAIProviderError as error:
+    except ModelProviderError as error:
         raise HTTPException(
             status_code=502,
-            detail="The AI retrieval provider could not complete the request.",
+            detail="The self-hosted AI retrieval service could not complete the request.",
         ) from error
     citations = [build_sanskrit_citation(verse) for verse in verses]
     return {

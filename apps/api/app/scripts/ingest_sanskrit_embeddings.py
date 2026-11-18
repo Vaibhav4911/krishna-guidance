@@ -7,7 +7,7 @@ from uuid import NAMESPACE_URL, uuid5
 from qdrant_client.models import Distance, PointStruct, VectorParams
 
 from app.config import settings
-from app.services.openai_service import embed_texts
+from app.services.model_service import embed_texts, require_model_configuration
 from app.services.sanskrit_corpus import VERSES_PATH, load_sanskrit_verses
 from app.services.sanskrit_rag_service import get_qdrant_client
 
@@ -15,6 +15,7 @@ EMBEDDING_BATCH_SIZE = 64
 
 
 def ingest(replace_existing: bool = False) -> int:
+    require_model_configuration()
     verses = load_sanskrit_verses()
     client = get_qdrant_client()
     collection_exists = client.collection_exists(settings.qdrant_collection)
@@ -44,7 +45,7 @@ def ingest(replace_existing: bool = False) -> int:
     client.create_collection(
         collection_name=settings.qdrant_collection,
         vectors_config=VectorParams(
-            size=settings.openai_embedding_dimensions,
+            size=settings.llm_embedding_dimensions,
             distance=Distance.COSINE,
         ),
     )
@@ -73,7 +74,7 @@ def ingest(replace_existing: bool = False) -> int:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Create multilingual OpenAI embeddings for the Sanskrit Gita in Qdrant."
+        description="Create local multilingual embeddings for the Sanskrit Gita in Qdrant."
     )
     parser.add_argument(
         "--replace",

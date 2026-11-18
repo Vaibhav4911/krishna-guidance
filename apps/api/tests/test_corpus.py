@@ -37,6 +37,15 @@ def test_retrieval_returns_exact_chapter_level_source_passage():
     assert citations[0].quote
 
 
+def test_modern_work_and_results_query_finds_chapter_two_translation_passage():
+    citations = retrieve_related_passages(
+        "I am worried about the results of my work",
+        limit=8,
+    )
+
+    assert 2 in {citation.chapter for citation in citations}
+
+
 def test_unmatched_query_does_not_receive_a_scripture_citation():
     assert retrieve_related_passages("qzxvplmnonexistent") == []
 

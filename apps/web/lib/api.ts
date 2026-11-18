@@ -6,6 +6,8 @@ export type Citation = {
   language: string;
   translation: string;
   quote: string;
+  meaning: string | null;
+  explanation: string | null;
 };
 
 export type ChatMessageResponse = {
@@ -15,12 +17,18 @@ export type ChatMessageResponse = {
   safety_mode: string;
 };
 
+export type ConversationMessage = {
+  role: 'user' | 'assistant';
+  content: string;
+  citation_ids?: string[];
+};
+
 export type DailyWisdomResponse = {
   passage: Citation;
   reflection: string;
 };
 
-export type GuidanceLanguage = 'en' | 'hi' | 'sa';
+export type GuidanceLanguage = 'en' | 'hi';
 
 export type AuthResponse = {
   user: {
@@ -41,22 +49,34 @@ async function apiError(response: Response, fallback: string): Promise<Error> {
   return new Error(message);
 }
 
-export async function requestEmailOtp(email: string): Promise<void> {
-  const response = await fetch(`${API_URL}/api/v1/auth/otp/request`, {
+export async function signUp(
+  email: string,
+  password: string,
+  displayName?: string,
+): Promise<AuthResponse> {
+  const body: { email: string; password: string; display_name?: string } = {
+    email,
+    password,
+  };
+  const normalizedName = displayName?.trim();
+  if (normalizedName) body.display_name = normalizedName;
+
+  const response = await fetch(`${API_URL}/api/v1/auth/signup`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email }),
+    body: JSON.stringify(body),
   });
-  if (!response.ok) throw await apiError(response, 'Unable to send a sign-in code.');
+  if (!response.ok) throw await apiError(response, 'Unable to create your account.');
+  return (await response.json()) as AuthResponse;
 }
 
-export async function verifyEmailOtp(email: string, otp: string): Promise<AuthResponse> {
-  const response = await fetch(`${API_URL}/api/v1/auth/otp/verify`, {
+export async function signIn(email: string, password: string): Promise<AuthResponse> {
+  const response = await fetch(`${API_URL}/api/v1/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, otp }),
+    body: JSON.stringify({ email, password }),
   });
-  if (!response.ok) throw await apiError(response, 'Unable to verify the sign-in code.');
+  if (!response.ok) throw await apiError(response, 'Unable to sign in.');
   return (await response.json()) as AuthResponse;
 }
 
@@ -72,6 +92,7 @@ export async function postChatMessage(
   message: string,
   accessToken: string,
   language: GuidanceLanguage = 'en',
+  history: ConversationMessage[] = [],
 ): Promise<ChatMessageResponse> {
   const response = await fetch(`${API_URL}/api/v1/chat/message`, {
     method: 'POST',
@@ -79,7 +100,7 @@ export async function postChatMessage(
       'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`,
     },
-    body: JSON.stringify({ message, language }),
+    body: JSON.stringify({ message, language, history }),
   });
 
   if (!response.ok) throw await apiError(response, 'Unable to fetch a guidance response.');

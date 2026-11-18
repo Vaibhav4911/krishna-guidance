@@ -12,7 +12,7 @@ def test_embedding_ingestion_indexes_verses_for_exact_retrieval(tmp_path, monkey
     client = QdrantClient(path=str(tmp_path / "qdrant"))
     settings_stub = SimpleNamespace(
         qdrant_collection=collection_name,
-        openai_embedding_dimensions=2,
+        llm_embedding_dimensions=2,
     )
     monkeypatch.setattr(ingest_sanskrit_embeddings, "settings", settings_stub)
     monkeypatch.setattr(sanskrit_rag_service, "settings", settings_stub)
@@ -31,7 +31,12 @@ def test_embedding_ingestion_indexes_verses_for_exact_retrieval(tmp_path, monkey
         ingest_sanskrit_embeddings, "embed_texts", fake_corpus_embeddings
     )
     monkeypatch.setattr(
-        sanskrit_rag_service, "embed_texts", lambda texts: [[1.0, 0.0]]
+        sanskrit_rag_service,
+        "embed_texts",
+        lambda texts: [[1.0, 0.0] for _ in texts],
+    )
+    monkeypatch.setattr(
+        sanskrit_rag_service, "retrieve_related_passages", lambda query, limit: []
     )
 
     try:

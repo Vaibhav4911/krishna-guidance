@@ -11,11 +11,20 @@ class Citation(BaseModel):
     language: str = "en"
     translation: str = "Traditional English"
     quote: str
+    meaning: str | None = None
+    explanation: str | None = None
+
+
+class ConversationMessage(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str = Field(..., min_length=1, max_length=3000)
+    citation_ids: list[str] = Field(default_factory=list, max_length=3)
 
 
 class ChatMessageRequest(BaseModel):
     message: str = Field(..., min_length=1, max_length=3000)
-    language: Literal["en", "hi", "sa"] = "en"
+    language: Literal["en", "hi"] = "en"
+    history: list[ConversationMessage] = Field(default_factory=list, max_length=8)
 
 
 class ChatMessageResponse(BaseModel):

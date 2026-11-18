@@ -17,4 +17,4 @@ cd apps/api
 python -m app.scripts.ingest_gutenberg_2388
 ```
 
-Use `--download` to fetch the source again. The generated `manifest.json` records its SHA-256 digest and source metadata. This poetic translation is only an English prototype source; it is not a substitute for a Sanskrit edition, a modern Hindi translation, or a verse-aligned critical text.
+Use `--download` to fetch the source again. The generated `manifest.json` records its SHA-256 digest and source metadata. The app uses this chapter-level text only to improve retrieval of Sanskrit verse candidates; it does not display these passages as citations or claim that they align to individual verses. This poetic translation is only an English prototype source; it is not a substitute for a Sanskrit edition, a reviewed Hindi translation, or a verse-aligned critical text. Hindi queries are translated locally for search, not against a Hindi scripture corpus.

@@ -27,18 +27,27 @@ than writing the corpus if any chapter has a missing, duplicated, or
 out-of-sequence verse marker. It retries Wikimedia API rate limits and writes
 the corpus and manifest only after validating all 18 chapters.
 
-After setting `OPENAI_API_KEY`, create the semantic index (stop the API first
-when using the local embedded Qdrant store):
+For local development, install Ollama and download BGE-M3:
 
-```powershell
+```cmd
+ollama pull bge-m3
+```
+
+Set `LLM_PROVIDER=ollama`,
+`LLM_EMBEDDINGS_BASE_URL=http://127.0.0.1:11434`, and
+`LLM_EMBEDDING_MODEL=bge-m3` in `apps/api/.env`, then create the index:
+
+```cmd
+cd apps\api
 python -m app.scripts.ingest_sanskrit_embeddings
 ```
 
-This creates multilingual OpenAI embeddings for the original Sanskrit text and
+This creates multilingual BGE-M3 embeddings for the original Sanskrit text and
 stores them in local Qdrant. Use `--replace` only to intentionally rebuild an
-existing collection. Chat sends user messages and retrieved Sanskrit excerpts
-to OpenAI for embedding and generation; use `QDRANT_URL` and `QDRANT_API_KEY`
-to configure a Qdrant server instead of the local store.
+existing collection. No paid model API is used. Hosted deployments can replace
+Ollama with private self-hosted inference endpoints and configure
+`QDRANT_URL`/`QDRANT_API_KEY` for a Qdrant server. Protect inference endpoints
+so only the API server can access them.
 
 ## Attribution and reuse
 
