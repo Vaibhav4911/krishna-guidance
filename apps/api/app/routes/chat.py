@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.db.models import User
 from app.middleware.auth import get_current_user
 from app.schemas import ChatMessageRequest, ChatMessageResponse
-from app.services.openai_service import OpenAIConfigurationError, OpenAIProviderError
+from app.services.model_service import ModelConfigurationError, ModelProviderError
 from app.services.response_service import build_guidance
 from app.services.sanskrit_corpus import build_sanskrit_citation, load_sanskrit_verses
 from app.services.sanskrit_rag_service import SanskritIndexUnavailableError
@@ -22,12 +22,12 @@ def health():
 def generate_response(payload: ChatMessageRequest, user: User = Depends(get_current_user)):
     try:
         return build_guidance(payload)
-    except (OpenAIConfigurationError, SanskritIndexUnavailableError) as error:
+    except (ModelConfigurationError, SanskritIndexUnavailableError) as error:
         raise HTTPException(status_code=503, detail=str(error)) from error
-    except OpenAIProviderError as error:
+    except ModelProviderError as error:
         raise HTTPException(
             status_code=502,
-            detail="The AI guidance provider could not complete the request.",
+            detail="The self-hosted AI guidance service could not complete the request.",
         ) from error
 
 

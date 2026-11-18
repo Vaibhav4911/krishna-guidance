@@ -39,6 +39,15 @@ STOPWORDS = {
     "some", "such", "than", "that", "the", "their", "them", "then", "there",
     "these", "they", "this", "those", "through", "was", "were", "what",
     "when", "where", "which", "who", "will", "with", "would", "you", "your",
+    "a", "an", "as", "at", "by", "he", "i", "in", "is", "it", "me", "my",
+    "of", "on", "or", "she", "to", "we", "us",
+}
+RESULT_TERMS = {
+    "result", "results", "outcome", "outcomes", "reward", "rewards",
+}
+ACTION_TERMS = {
+    "action", "actions", "deed", "deeds", "duty", "effort", "efforts",
+    "job", "jobs", "karma", "work", "works",
 }
 
 
@@ -170,6 +179,16 @@ def _tokens(text: str) -> list[str]:
     ]
 
 
+def expand_retrieval_query(query: str) -> str:
+    query_terms = set(_tokens(query))
+    concepts: list[str] = []
+    if query_terms & RESULT_TERMS:
+        concepts.append("fruit")
+    if query_terms & ACTION_TERMS:
+        concepts.append("action")
+    return " ".join(concepts) or query
+
+
 def retrieve_related_passages(
     query: str,
     language: str = LANGUAGE,
@@ -181,6 +200,10 @@ def retrieve_related_passages(
         return []
 
     query_terms = set(_tokens(query))
+    if query_terms & RESULT_TERMS:
+        query_terms.add("fruit")
+    if query_terms & ACTION_TERMS:
+        query_terms.add("action")
     if not query_terms:
         return []
 

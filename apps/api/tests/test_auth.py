@@ -6,34 +6,84 @@ from app.db.models import AuthSession, User
 from app.services import auth_service
 
 
-def test_email_otp_is_single_use_and_rate_limited(test_context, monkeypatch):
-    _, session_factory = test_context
-    sent_codes: list[str] = []
-    monkeypatch.setattr(
-        auth_service,
-        "_send_otp_email",
-        lambda email, code: sent_codes.append(code),
+def test_signup_creates_hashed_password_and_login_returns_session(test_context):
+    client, session_factory = test_context
+    email = f"signup-{uuid4().hex}@example.com"
+    password = "correct horse battery"
+
+    signup = client.post(
+        "/api/v1/auth/signup",
+        json={
+            "email": email.upper(),
+            "password": password,
+            "display_name": "Test User",
+        },
     )
 
+    assert signup.status_code == 201
+    signup_body = signup.json()
+    assert signup_body["user"]["email"] == email
+    assert signup_body["user"]["name"] == "Test User"
+    assert signup_body["access_token"]
+    assert signup_body["token_type"] == "bearer"
+
     with session_factory() as db:
-        email = f"otp-{uuid4().hex}@example.test"
-        auth_service.request_email_otp(db, email)
-        assert len(sent_codes) == 1
+        user = db.query(User).filter(User.email == email).one()
+        assert user.password_hash != password
+        assert auth_service.verify_password(password, user.password_hash)
+        assert db.query(AuthSession).filter(AuthSession.user_id == user.id).count() == 1
 
-        try:
-            auth_service.request_email_otp(db, email)
-        except auth_service.OtpRateLimitError:
-            pass
-        else:
-            raise AssertionError("OTP resend should be rate limited.")
+    login = client.post(
+        "/api/v1/auth/login",
+        json={"email": email, "password": password},
+    )
+    assert login.status_code == 200
+    assert login.json()["user"]["email"] == email
+    assert login.json()["access_token"]
 
-        wrong_code = "000000" if sent_codes[0] != "000000" else "000001"
-        assert auth_service.verify_email_otp(db, email, wrong_code) is None
 
-        user = auth_service.verify_email_otp(db, email, sent_codes[0])
-        assert user is not None
-        assert user.email == email
-        assert auth_service.verify_email_otp(db, email, sent_codes[0]) is None
+def test_signup_rejects_duplicate_email_and_login_rejects_bad_password(test_context):
+    client, _ = test_context
+    email = f"duplicate-{uuid4().hex}@example.com"
+    password = "correct horse battery"
+
+    first_signup = client.post(
+        "/api/v1/auth/signup",
+        json={"email": email, "password": password},
+    )
+    assert first_signup.status_code == 201
+
+    duplicate_signup = client.post(
+        "/api/v1/auth/signup",
+        json={"email": email.upper(), "password": password},
+    )
+    assert duplicate_signup.status_code == 409
+
+    bad_login = client.post(
+        "/api/v1/auth/login",
+        json={"email": email, "password": "incorrect password"},
+    )
+    assert bad_login.status_code == 401
+    assert bad_login.json()["detail"] == "Invalid email or password."
+
+
+def test_signup_enforces_password_minimum_and_old_auth_routes_are_removed(test_context):
+    client, _ = test_context
+
+    short_password = client.post(
+        "/api/v1/auth/signup",
+        json={"email": f"short-{uuid4().hex}@example.com", "password": "short"},
+    )
+    assert short_password.status_code == 422
+
+    assert client.post(
+        "/api/v1/auth/otp/request",
+        json={"email": "person@example.com"},
+    ).status_code == 404
+    assert client.post(
+        "/api/v1/auth/google/verify",
+        json={"credential": "unused"},
+    ).status_code == 404
 
 
 def test_access_token_can_be_revoked(test_context):

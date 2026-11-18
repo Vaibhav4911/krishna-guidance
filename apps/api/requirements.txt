@@ -10,4 +10,3 @@ psycopg[binary]==3.2.4
 PyJWT==2.10.1
 redis==5.2.0
 qdrant-client==1.13.2
-google-auth[requests]==2.37.0

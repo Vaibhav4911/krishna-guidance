@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Optional
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Index, Integer, String, Text, UniqueConstraint
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -13,11 +13,10 @@ class Base(DeclarativeBase):
 
 class User(Base):
     __tablename__ = "users"
-    __table_args__ = (UniqueConstraint("google_subject", name="uq_users_google_subject"),)
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
-    google_subject: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    password_hash: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     display_name: Mapped[str] = mapped_column(String(255), nullable=True)
     locale: Mapped[str] = mapped_column(String(16), default="en")
     role: Mapped[str] = mapped_column(String(32), default="user")
@@ -29,7 +28,6 @@ class User(Base):
     journal_entries: Mapped[list[JournalEntry]] = relationship(back_populates="user")
     favorites: Mapped[list[FavoriteVerse]] = relationship(back_populates="user")
     auth_sessions: Mapped[list[AuthSession]] = relationship(back_populates="user")
-
 
 class Conversation(Base):
     __tablename__ = "conversations"
@@ -108,16 +106,3 @@ class AuthSession(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     user: Mapped[User] = relationship(back_populates="auth_sessions")
-
-
-class OtpChallenge(Base):
-    __tablename__ = "otp_challenges"
-    __table_args__ = (Index("ix_otp_challenges_email_created_at", "email", "created_at"),)
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
-    code_digest: Mapped[str] = mapped_column(String(64), nullable=False)
-    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
-    attempts: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
-    consumed_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))

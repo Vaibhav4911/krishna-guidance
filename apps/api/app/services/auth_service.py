@@ -3,36 +3,33 @@ from __future__ import annotations
 import hashlib
 import hmac
 import secrets
-import smtplib
-import ssl
-from datetime import datetime, timedelta, timezone
-from email.message import EmailMessage
+from datetime import datetime, timezone
 from uuid import uuid4
 
-from sqlalchemy import func
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.core.security import create_access_token
-from app.db.models import AuthSession, OtpChallenge, User
+from app.db.models import AuthSession, User
 
-OTP_TTL_MINUTES = 10
-OTP_RESEND_SECONDS = 60
-OTP_MAX_ATTEMPTS = 5
-OTP_MAX_REQUESTS_PER_HOUR = 5
+PASSWORD_HASH_N = 2**14
+PASSWORD_HASH_R = 8
+PASSWORD_HASH_P = 1
+PASSWORD_HASH_LENGTH = 64
+PASSWORD_SALT_LENGTH = 16
+_DUMMY_SALT = b"krishna-guidance-dummy-salt"
+_DUMMY_PASSWORD_HASH = hashlib.scrypt(
+    b"not-a-real-user-password",
+    salt=_DUMMY_SALT,
+    n=PASSWORD_HASH_N,
+    r=PASSWORD_HASH_R,
+    p=PASSWORD_HASH_P,
+    dklen=PASSWORD_HASH_LENGTH,
+).hex()
 
 
-def _ensure_utc(value: datetime) -> datetime:
-    if value.tzinfo is None:
-        return value.replace(tzinfo=timezone.utc)
-    return value
-
-
-class OtpRateLimitError(Exception):
-    pass
-
-
-class OtpDeliveryError(Exception):
+class EmailAlreadyRegisteredError(Exception):
     pass
 
 
@@ -40,133 +37,92 @@ def _normalize_email(email: str) -> str:
     return email.strip().lower()
 
 
-def _otp_digest(email: str, code: str) -> str:
-    message = f"{_normalize_email(email)}:{code}".encode()
-    return hmac.new(settings.jwt_secret.encode(), message, hashlib.sha256).hexdigest()
-
-
-def _send_otp_email(email: str, code: str) -> None:
-    if not settings.smtp_host or not settings.smtp_from_email:
-        raise OtpDeliveryError("Email delivery is not configured.")
-
-    message = EmailMessage()
-    message["Subject"] = "Your Krishna Guidance sign-in code"
-    message["From"] = settings.smtp_from_email
-    message["To"] = email
-    message.set_content(
-        f"Your sign-in code is {code}. It expires in {OTP_TTL_MINUTES} minutes. "
-        "If you did not request this code, you can ignore this email."
+def hash_password(password: str) -> str:
+    salt = secrets.token_bytes(PASSWORD_SALT_LENGTH)
+    password_digest = hashlib.scrypt(
+        password.encode("utf-8"),
+        salt=salt,
+        n=PASSWORD_HASH_N,
+        r=PASSWORD_HASH_R,
+        p=PASSWORD_HASH_P,
+        dklen=PASSWORD_HASH_LENGTH,
+    )
+    return (
+        f"scrypt${PASSWORD_HASH_N}${PASSWORD_HASH_R}${PASSWORD_HASH_P}"
+        f"${salt.hex()}${password_digest.hex()}"
     )
 
+
+def verify_password(password: str, encoded_hash: str | None) -> bool:
+    if not encoded_hash:
+        return False
     try:
-        with smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=10) as smtp:
-            smtp.starttls(context=ssl.create_default_context())
-            if settings.smtp_username:
-                smtp.login(settings.smtp_username, settings.smtp_password or "")
-            smtp.send_message(message)
-    except (OSError, smtplib.SMTPException) as exc:
-        raise OtpDeliveryError("Unable to deliver sign-in email.") from exc
-
-
-def request_email_otp(db: Session, email: str) -> None:
-    normalized_email = _normalize_email(email)
-    now = datetime.now(timezone.utc)
-    latest = (
-        db.query(OtpChallenge)
-        .filter(OtpChallenge.email == normalized_email)
-        .order_by(OtpChallenge.created_at.desc())
-        .with_for_update()
-        .first()
-    )
-
-    if latest and (now - _ensure_utc(latest.created_at)).total_seconds() < OTP_RESEND_SECONDS:
-        raise OtpRateLimitError("Please wait before requesting another code.")
-
-    request_count = (
-        db.query(func.count(OtpChallenge.id))
-        .filter(
-            OtpChallenge.email == normalized_email,
-            OtpChallenge.created_at >= now - timedelta(hours=1),
-        )
-        .scalar()
-    )
-    if request_count >= OTP_MAX_REQUESTS_PER_HOUR:
-        raise OtpRateLimitError("Too many sign-in code requests. Try again later.")
-
-    code = f"{secrets.randbelow(1_000_000):06d}"
-    challenge = OtpChallenge(
-        email=normalized_email,
-        code_digest=_otp_digest(normalized_email, code),
-        expires_at=now + timedelta(minutes=OTP_TTL_MINUTES),
-    )
-    db.add(challenge)
-    db.commit()
-    db.refresh(challenge)
-
-    try:
-        _send_otp_email(normalized_email, code)
-    except OtpDeliveryError:
-        db.delete(challenge)
-        db.commit()
-        raise
-
-
-def verify_email_otp(db: Session, email: str, code: str) -> User | None:
-    normalized_email = _normalize_email(email)
-    now = datetime.now(timezone.utc)
-    challenge = (
-        db.query(OtpChallenge)
-        .filter(
-            OtpChallenge.email == normalized_email,
-            OtpChallenge.consumed_at.is_(None),
-        )
-        .order_by(OtpChallenge.created_at.desc())
-        .with_for_update()
-        .first()
-    )
-
+        algorithm, n, r, p, salt_hex, digest_hex = encoded_hash.split("$")
+        if (
+            algorithm != "scrypt"
+            or int(n) != PASSWORD_HASH_N
+            or int(r) != PASSWORD_HASH_R
+            or int(p) != PASSWORD_HASH_P
+        ):
+            return False
+        salt = bytes.fromhex(salt_hex)
+        expected_digest = bytes.fromhex(digest_hex)
+    except (ValueError, TypeError):
+        return False
     if (
-        challenge is None
-        or _ensure_utc(challenge.expires_at) <= now
-        or challenge.attempts >= OTP_MAX_ATTEMPTS
-        or len(code) != 6
-        or not code.isdigit()
+        len(salt) != PASSWORD_SALT_LENGTH
+        or len(expected_digest) != PASSWORD_HASH_LENGTH
     ):
-        return None
+        return False
+    actual_digest = hashlib.scrypt(
+        password.encode("utf-8"),
+        salt=salt,
+        n=PASSWORD_HASH_N,
+        r=PASSWORD_HASH_R,
+        p=PASSWORD_HASH_P,
+        dklen=PASSWORD_HASH_LENGTH,
+    )
+    return hmac.compare_digest(actual_digest, expected_digest)
 
-    challenge.attempts += 1
-    if not hmac.compare_digest(challenge.code_digest, _otp_digest(normalized_email, code)):
-        if challenge.attempts >= OTP_MAX_ATTEMPTS:
-            challenge.consumed_at = now
+
+def register_user(
+    db: Session,
+    email: str,
+    password: str,
+    display_name: str | None = None,
+) -> User:
+    normalized_email = _normalize_email(email)
+    if db.query(User).filter(User.email == normalized_email).first():
+        raise EmailAlreadyRegisteredError
+
+    user = User(
+        email=normalized_email,
+        password_hash=hash_password(password),
+        display_name=(display_name or "").strip() or normalized_email.split("@")[0],
+    )
+    db.add(user)
+    try:
         db.commit()
-        return None
-
-    challenge.consumed_at = now
-    user = db.query(User).filter(User.email == normalized_email).first()
-    if user is None:
-        user = User(email=normalized_email, display_name=normalized_email.split("@")[0])
-        db.add(user)
-    db.commit()
+    except IntegrityError as error:
+        db.rollback()
+        if db.query(User).filter(User.email == normalized_email).first():
+            raise EmailAlreadyRegisteredError from error
+        raise
     db.refresh(user)
     return user
 
 
-def upsert_google_user(db: Session, subject: str, email: str, name: str | None) -> User:
+def authenticate_user(db: Session, email: str, password: str) -> User | None:
     normalized_email = _normalize_email(email)
-    user = db.query(User).filter(User.google_subject == subject).first()
-    if user is None:
-        user = db.query(User).filter(User.email == normalized_email).first()
-    if user is None:
-        user = User(email=normalized_email, display_name=name, google_subject=subject)
-        db.add(user)
-    else:
-        if user.google_subject not in (None, subject):
-            raise ValueError("This email is already linked to a different Google account.")
-        user.google_subject = subject
-        if name:
-            user.display_name = name
-    db.commit()
-    db.refresh(user)
+    user = db.query(User).filter(User.email == normalized_email).first()
+    stored_hash = (
+        user.password_hash
+        if user and user.password_hash
+        else _DUMMY_PASSWORD_HASH
+    )
+    password_matches = verify_password(password, stored_hash)
+    if user is None or not user.is_active or not password_matches:
+        return None
     return user
 
 

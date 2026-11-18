@@ -150,13 +150,19 @@ def get_sanskrit_verse(chapter: int, verse: int) -> SanskritVerse | None:
     ]
 
 
-def build_sanskrit_citation(verse: SanskritVerse) -> Citation:
+def build_sanskrit_citation(
+    verse: SanskritVerse,
+    meaning: str | None = None,
+    explanation: str | None = None,
+) -> Citation:
     return Citation(
         chapter=verse.chapter,
         verse=verse.verse,
         source=SOURCE_TITLE,
         source_url=verse.source_url,
         language=LANGUAGE,
-        translation="Sanskrit मूलपाठ",
+        translation="Original Sanskrit verse",
         quote=verse.text,
+        meaning=meaning,
+        explanation=explanation,
     )
